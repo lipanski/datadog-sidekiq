@@ -4,7 +4,7 @@ A Rust app to track sidekiq enqueued & processed jobs in DataDog.
 
 ## Usage
 
-Grab the latest binary from the release section or build it from source.
+Grab the latest binary from the [release section](https://github.com/blacklane/datadog-sidekiq/releases) or build it from source.
 
 Configure the monitor via environment variables:
 
