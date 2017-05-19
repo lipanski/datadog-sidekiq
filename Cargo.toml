@@ -1,7 +1,7 @@
 [package]
 name = "datadog-sidekiq"
 version = "0.1.0"
-authors = ["Florin Lipan <florin.lipan@blacklane.com>"]
+authors = ["Florin Lipan <florinlipan@gmail.com>"]
 
 [dependencies]
 redis = "0.8.0"

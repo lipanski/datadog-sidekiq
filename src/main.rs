@@ -115,14 +115,12 @@ fn main() {
         easy.post(true).unwrap();
         easy.url(&url).unwrap();
 
-        info!("POST {}", url);
-
         let mut headers = HeaderList::new();
         headers.append("content-type: application/json").unwrap();
         easy.http_headers(headers).unwrap();
 
         let body = serde_json::to_string(&series).unwrap();
-        info!("{}", body);
+        info!("\nPOST {}\n{}", url, body);
 
         easy.post_field_size(body.len() as u64).unwrap();
 
