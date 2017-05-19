@@ -2,6 +2,7 @@
 name = "datadog-sidekiq"
 version = "0.1.0"
 authors = ["Florin Lipan <florinlipan@gmail.com>"]
+license = "MIT"
 
 [dependencies]
 redis = "0.8.0"

@@ -1,6 +1,6 @@
 # datadog-sidekiq
 
-A Rust app to track sidekiq enqueued & processed jobs in DataDog.
+A Rust app to track Sidekiq enqueued & processed jobs in DataDog.
 
 ## Usage
 
