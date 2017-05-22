@@ -7,7 +7,7 @@ A Rust app to track Sidekiq enqueued & processed jobs in DataDog.
 Two metrics will be made available in DataDog:
 
 - `sidekiq.enqueued`: the amount of enqueued jobs at one point in time
-- `sidekiq.processed`: the amount of processed jobs between two polling intervals
+- `sidekiq.processed`: the amount of processed jobs between two consequent polling intervals
 
 Consider using the `TAGS` environment variable to specify your data sources.
 
@@ -28,12 +28,12 @@ REDIS_URL=redis://localhost:6379/0
 REDIS_NAMESPACE=some:namespace
 
 # [Optional] The polling interval in seconds (defaults to 60 seconds)
-INTERVAL=30
+INTERVAL=60
 
 # [Optional] A comma-separated list of tags
 TAGS=application:xxx,environment:yyy,hello:world
 
-# [Optional] The log level (allowed values: error|info)
+# [Optional] The log level: either "error" or "info" (defaults to no logging)
 RUST_LOG=error
 ```
 
@@ -43,19 +43,19 @@ Run the binary:
 datadog-sidekiq
 ```
 
-Alternatively you can also run it in the background:
+Or run it in the background:
 
 ```bash
 datadog-sidekiq &
 ```
 
-If that's not enough, consider using a supervisor (Systemd, runit, Monit, immortal etc.) so you can make sure that your monitor will be available even after it crashes or the system is restarted.
+If that's not enough, consider using a supervisor (Systemd, runit, Monit, immortal etc.) so you can make sure that your monitor will be available even if the system is restarted.
 
 ## Build form source
 
-Install Rust (latest stable should be fine).
+Install [Rust](https://www.rust-lang.org) - latest stable version should be fine.
 
-Clone the project and run:
+Clone the project, enter the project directory and run:
 
 ```bash
 cargo build --release
