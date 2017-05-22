@@ -53,7 +53,7 @@ If that's not enough, consider using a supervisor (Systemd, runit, Monit, immort
 
 ## Build form source
 
-Install [Rust](https://www.rust-lang.org) - latest stable version should be fine.
+Install [Rust](https://www.rust-lang.org) (latest stable version should be fine).
 
 Clone the project, enter the project directory and run:
 
