@@ -13,7 +13,7 @@ Consider using the `TAGS` environment variable to specify your data sources.
 
 ## Usage
 
-Grab the latest binary from the [release section](https://github.com/blacklane/datadog-sidekiq/releases) or build it from source.
+Grab the latest binary from the [release section](https://github.com/lipanski/datadog-sidekiq/releases) or build it from source.
 
 Configure the monitor via environment variables:
 
