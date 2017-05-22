@@ -51,7 +51,7 @@ datadog-sidekiq &
 
 If that's not enough, consider using a supervisor (Systemd, runit, Monit, immortal etc.) so you can make sure that your monitor will be available even if the system is restarted.
 
-## Build form source
+## Build from source
 
 Install [Rust](https://www.rust-lang.org) (latest stable version should be fine).
 
