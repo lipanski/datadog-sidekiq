@@ -60,3 +60,11 @@ Clone the project, enter the project directory and run:
 ```bash
 cargo build --release
 ```
+
+## Alternative
+
+Another way to track Sidekiq metrics in DataDog is by using the [DataDog Redis integration](https://docs.datadoghq.com/integrations/redis/). There are some drawbacks though and I haven't tried it out myself.
+
+Fetching the *amount of processed jobs* is as easy as querying `[namespace]:stat:processed`, but fetching the *amount of enqueued jobs* is a bit more complicated. First you need to query the names of all your queues - `SMEMBERS [namespace]:queues` - and for *each one* of these names you'll need to run `LLEN [namespace]:queue:[name]` and sum up the results. Ideally you should pipeline these calls, just like Sidekiq does and just like *datadog-sidekiq* does.
+
+If you're interested in only one queue or just a couple, using the DataDog Redis integration might do the job. If you want a more dynamic solution, give a try to *datadog-sidekiq* :)
