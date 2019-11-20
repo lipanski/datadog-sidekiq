@@ -98,9 +98,8 @@ fn main() {
 
     let mut previous_total_processed: Option<u32> = None;
 
+    debug!("Welcome to datadog-sidekiq");
     loop {
-        sleep(Duration::new(interval, 0));
-
         // Redis was down. Try to re-establish a connection.
         if reconnect {
             info!("Trying to connect to Redis again.");
@@ -151,6 +150,8 @@ fn main() {
             Ok(_) => {},
             Err(err) => { error!("An error occured while sending the series to DataDog: {}", err); }
         }
+
+        sleep(Duration::new(interval, 0));
     }
 }
 
