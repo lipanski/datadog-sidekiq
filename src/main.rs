@@ -118,11 +118,26 @@ fn main() {
 
         let mut series = Series::new();
 
-        match get_total_enqueued(&conn, &redis_ns) {
-            Ok(Some(total_enqueued)) => {
-                series.push(Metric::gauge("sidekiq.enqueued", total_enqueued, tags.clone()));
-            },
-            Ok(None) => {},
+        match get_enqueued(&conn, &redis_ns) {
+            Ok(ref enqueued_count_by_queue) => {
+                for (queue_name, count) in enqueued_count_by_queue {
+                    let mut extra = vec!["queue_name:".to_string() + queue_name];
+                    let mut new_tags = tags.clone();
+                    new_tags.append(&mut extra);
+                    series.push(Metric::gauge("sidekiq.enqueued", *count, new_tags));
+                }
+
+                let mut total_enqueued = 0;
+                for (_queue_name, count) in enqueued_count_by_queue {
+                    total_enqueued += count;
+                }
+                series.push(Metric::gauge(
+                    "sidekiq.total_enqueued",
+                    total_enqueued,
+                    tags.clone(),
+                ));
+            }
+
             Err(redis_err) => {
                 error!("A Redis error occured: {}", redis_err);
                 reconnect = true;
@@ -159,18 +174,28 @@ fn establish_redis_connection(client: &RedisClient) -> Result<Connection, RedisE
     client.get_connection()
 }
 
-fn get_total_enqueued(conn: &Connection, redis_ns: &Namespace) -> Result<Option<u32>, RedisError> {
+fn get_enqueued(
+    conn: &Connection,
+    redis_ns: &Namespace,
+) -> Result<HashMap<String, u32>, RedisError> {
+    let mut actual_result: HashMap<String, u32> = HashMap::new();
     let queues: HashSet<String> = conn.smembers(redis_ns.wrap("queues"))?;
 
     let mut pipe = redis::pipe();
-    for queue in queues {
+
+    for queue in &queues {
         let queue_name = ["queue", &queue].join(":");
         pipe.add_command(cmd("LLEN").arg(redis_ns.wrap(queue_name)));
     }
 
     let total_per_queue: Vec<u32> = pipe.query(conn)?;
+    let mut i: usize = 0;
+    for queue in &queues {
+        actual_result.insert(queue.to_string(), total_per_queue[i]);
+        i += 1;
+    }
 
-    Ok(Some(total_per_queue.iter().sum()))
+    Ok(actual_result)
 }
 
 fn get_total_processed(conn: &Connection, redis_ns: &Namespace) -> Result<Option<u32>, RedisError> {
