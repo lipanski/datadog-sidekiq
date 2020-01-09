@@ -1,10 +1,10 @@
 # datadog-sidekiq
 
-A Rust app to track Sidekiq enqueued & processed jobs in DataDog.
+A Rust app to track Sidekiq enqueued & processed jobs in Datadog.
 
 ## Metrics
 
-Two metrics will be made available in DataDog:
+Two metrics will be made available in Datadog:
 
 - `sidekiq.enqueued`: the amount of enqueued jobs at one point in time
 - `sidekiq.processed`: the amount of processed jobs between two consequent polling intervals
@@ -18,7 +18,7 @@ Grab the latest binary from the [release section](https://github.com/lipanski/da
 Configure the monitor via environment variables:
 
 ```bash
-# [Required] The DataDog API key
+# [Required] The Datadog API key
 DD_API_KEY=xxx
 
 # [Required] The full Redis URL (including the port and database number)
@@ -67,8 +67,8 @@ cargo build --release
 
 ## Alternative
 
-Another way to track Sidekiq metrics in DataDog is by using the [DataDog Redis integration](https://docs.datadoghq.com/integrations/redis/). There are some drawbacks though and I haven't tried it out myself.
+Another way to track Sidekiq metrics in Datadog is by using the [Datadog Redis integration](https://docs.datadoghq.com/integrations/redis/). There are some drawbacks though and I haven't tried it out myself.
 
 Fetching the *amount of processed jobs* is as easy as querying `[namespace]:stat:processed`, but fetching the *amount of enqueued jobs* is a bit more complicated. First you need to query the names of all your queues - `SMEMBERS [namespace]:queues` - and for *each one* of these names you'll need to run `LLEN [namespace]:queue:[name]` and sum up the results. Ideally you should pipeline these calls, just like Sidekiq does and just like *datadog-sidekiq* does.
 
-If you're interested in only one queue or just a couple, using the DataDog Redis integration might do the job. If you want a more dynamic solution, give a try to *datadog-sidekiq* :)
+If you're interested in only one queue or just a couple, using the Datadog Redis integration might do the job. If you want a more dynamic solution, give a try to *datadog-sidekiq* :)
